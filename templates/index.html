@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>Thundercloud Authentication™</title>
+  </head>
+  <body>
+    <div class="emoji-background"></div>
+    <nav class="navbar">
+      <div class="logo" aria-label="Thundercloud logo">🌩️</div>
+      <div class="nav-links">
+        <a href="/login">Login</a>
+      </div>
+    </nav>
+
+    <main class="hero-section">
+      <h1 id="hero-title">🌩️ Thundercloud Authentication™</h1>
+      <h2 id="hero-subtitle">Prove your storm-making skills to enter the Cloud Kingdom.</h2>
+
+      <div class="cta-buttons">
+        <a href="/signup" class="cta-btn">Sign Up & Make a Storm</a>
+        <a href="/login" class="cta-btn">Log In & Call the Thunder</a>
+      </div>
+    </main>
+    <script>
+      const emojis = ["🌩️", "🌧️", "🌪️", "🌨️", "☀️", "☁️", "🌥️", "⛅", "🌦️"];
+      const background = document.querySelector(".emoji-background");
+      for (let i = 0; i < 30; i++) {
+        const emoji = document.createElement("div");
+        emoji.classList.add("emoji");
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + "vw";
+        emoji.style.top = Math.random() * 100 + "vh";
+        emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
+        background.appendChild(emoji);
+      }
+    </script>
+  </body>
+</html>

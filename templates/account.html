@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌩️ Your Storm Kingdom Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="emoji-background"></div>
+    <nav class="navbar">
+        <div class="logo">🌩️</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form class="account-form" action="/logout" method="POST">
+            <h1>Welcome to Your Storm Kingdom</h1>
+            <div class="form-section">
+                <h2>👑 Kingdom Name</h2>
+                <div class="username">{{ username }}</div>
+            </div>
+
+            <div class="form-section">
+                <h2>⚡ Your Storm Sequence</h2>
+                <div class="storm-sequence">{{ storm_sequence }}</div>
+            </div>
+
+            <div class="form-section">
+                <h3>🔑 Token Info</h3>
+                <div class="token-info">{{ token }}</div>
+            </div>
+
+            <button type="submit" class="cta-btn logout-btn">Logout</button>
+        </form>
+    </div>
+    <script>
+      const emojis = ["🌩️", "🌧️", "🌪️", "🌨️", "☀️", "☁️", "🌥️", "⛅", "🌦️"];
+      const background = document.querySelector(".emoji-background");
+      for (let i = 0; i < 30; i++) {
+        const emoji = document.createElement("div");
+        emoji.classList.add("emoji");
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + "vw";
+        emoji.style.top = Math.random() * 100 + "vh";
+        emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
+        background.appendChild(emoji);
+      }
+    </script>
+</body>
+</html>

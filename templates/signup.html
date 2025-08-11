@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create Your Storm Kingdom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="emoji-background"></div>
+    <div class="container">
+      <form action="/auth/signup" method="POST" id="signup-form">
+        <h1>🌩️ Create Your Storm Kingdom</h1>
+
+        <!-- Claim Kingdom -->
+        <div class="form-section">
+          <h2>👑 Claim Your Kingdom</h2>
+          <p>Choose a name for your storm realm</p>
+          <div class="in-item">
+            <label for="username">Kingdom Name</label>
+            <input
+              placeholder="Enter your storm master name"
+              type="text"
+              id="username"
+              name="username"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Storm Sequence -->
+        <div class="form-section">
+          <h2>⚡ Your Storm Sequence</h2>
+          <p>Drag 5–7 weather emojis to create your unique pattern</p>
+          <div class="drop-zone" id="storm-sequence">Drop your storm elements here...</div>
+          <p id="sequence-count">Sequence: 0/7 elements</p>
+        </div>
+
+        <!-- Weather Elements -->
+        <div class="form-section">
+          <h2>☀️ Weather Elements</h2>
+          <p>Drag these weather emojis to build your storm sequence</p>
+          <div class="weather-elements">
+            <span>☁️</span>
+            <span>🌥️</span>
+            <span>⛅</span>
+            <span>🌩️</span>
+            <span>🌧️</span>
+            <span>🌦️</span>
+            <span>🌪️</span>
+            <span>🌨️</span>
+            <span>☀️</span>
+          </div>
+        </div>
+
+        <!-- Hidden input to store the sequence for form submission -->
+        <input type="hidden" name="storm_sequence" id="storm_sequence_input" />
+
+        <input type="submit" value="⚡ Forge Your Storm Kingdom" class="cta-btn" />
+      </form>
+    </div>
+
+    <script>
+      const emojiMap = {
+        "☁️": ":cloud:",
+        "🌥️": ":sun_behind_large_cloud:",
+        "⛅": ":sun_behind_cloud:",
+        "🌩️": ":cloud_with_lightning:",
+        "🌧️": ":cloud_with_rain:",
+        "🌦️": ":sun_behind_rain_cloud:",
+        "🌪️": ":tornado:",
+        "🌨️": ":cloud_with_snow:",
+        "☀️": ":sun:",
+      };
+
+      const weatherElements = document.querySelectorAll(".weather-elements span");
+      const dropZone = document.getElementById("storm-sequence");
+      const countDisplay = document.getElementById("sequence-count");
+      const form = document.getElementById("signup-form");
+
+      weatherElements.forEach((el) => {
+        el.setAttribute("draggable", true);
+        el.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text", e.target.textContent);
+        });
+      });
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const emoji = e.dataTransfer.getData("text");
+        if (dropZone.textContent.includes("Drop your storm elements")) {
+          dropZone.textContent = "";
+        }
+        dropZone.textContent += emoji + " ";
+        const count = dropZone.textContent.trim().split(/\s+/).length;
+        countDisplay.textContent = `Sequence: ${count}/7 elements`;
+      });
+
+      form.addEventListener("submit", (e) => {
+        // Get array of emojis from drop zone
+        const rawEmojis = dropZone.textContent.trim().split(/\s+/);
+
+        if (rawEmojis.length < 5) {
+          e.preventDefault();
+          alert("Please drag at least 5 emojis to form your storm sequence!");
+          return;
+        }
+
+        // Convert emojis to :name: format string
+        const convertedSequence = rawEmojis
+          .map((emj) => emojiMap[emj] || emj)
+          .join("");
+
+        document.getElementById("storm_sequence_input").value = convertedSequence;
+        // Allow form to submit normally
+      });
+
+      const emojis = ["🌩️", "🌧️", "🌪️", "🌨️", "☀️", "☁️", "🌥️", "⛅", "🌦️"];
+      const background = document.querySelector(".emoji-background");
+      for (let i = 0; i < 30; i++) {
+        const emoji = document.createElement("div");
+        emoji.classList.add("emoji");
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + "vw";
+        emoji.style.top = Math.random() * 100 + "vh";
+        emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
+        background.appendChild(emoji);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Error</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    @keyframes face-palm {
+      0% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(-15deg);
+      }
+      50% {
+        transform: rotate(15deg);
+      }
+      75% {
+        transform: rotate(-15deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+    .error-container h1 {
+      animation: face-palm 1s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="emoji-background"></div>
+  <div class="container error-container">
+    <h1>🤦‍♂️ Authentication Error</h1>
+    <p>{{ message }}</p>
+    <a href="{{ url_for('login') }}" class="cta-btn">Try Again</a>
+  </div>
+  <script>
+    const emojis = ["😭", "😢", "😡", "😠", "🤬", "🤯", "😱", "😨", "😰"];
+    const background = document.querySelector(".emoji-background");
+    for (let i = 0; i < 30; i++) {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.top = Math.random() * 100 + "vh";
+      emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
+      background.appendChild(emoji);
+    }
+  </script>
+</body>
+</html>

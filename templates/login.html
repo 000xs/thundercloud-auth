@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Storm Kingdom Login</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="emoji-background"></div>
+    <div class="container">
+      <form action="/auth/login" method="POST" id="login-form">
+        <h1>🌩️ Storm Kingdom Login</h1>
+
+        <!-- Username -->
+        <div class="form-section">
+          <h2>👑 Kingdom Name</h2>
+          <div class="in-item">
+            <label for="username">Kingdom Name</label>
+            <input
+              placeholder="Enter your storm master name"
+              type="text"
+              id="username"
+              name="username"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Password as emoji drag-drop -->
+        <div class="form-section">
+          <h2>🔐 Your Storm Sequence Password</h2>
+          <p>Drag 5–7 weather emojis to enter your password</p>
+
+          <div class="drop-zone" id="storm-password-drop">
+            Drop your storm elements here...
+          </div>
+          <p id="password-sequence-count">Sequence: 0/7 elements</p>
+
+          <!-- Weather Elements to drag -->
+          <div class="weather-elements">
+            <span>☁️</span>
+            <span>🌥️</span>
+            <span>⛅</span>
+            <span>🌩️</span>
+            <span>🌧️</span>
+            <span>🌦️</span>
+            <span>🌪️</span>
+            <span>🌨️</span>
+            <span>☀️</span>
+          </div>
+
+          <!-- Hidden input to submit the sequence -->
+          <input type="hidden" name="password" id="password_input" required />
+        </div>
+
+        <input
+          type="submit"
+          value="⚡ Enter Your Storm Kingdom"
+          class="cta-btn"
+        />
+      </form>
+    </div>
+
+    <script>
+      const emojiMap = {
+        "☁️": ":cloud:",
+        "🌥️": ":sun_behind_large_cloud:",
+        "⛅": ":sun_behind_cloud:",
+        "🌩️": ":cloud_with_lightning:",
+        "🌧️": ":cloud_with_rain:",
+        "🌦️": ":sun_behind_rain_cloud:",
+        "🌪️": ":tornado:",
+        "🌨️": ":cloud_with_snow:",
+        "☀️": ":sun:",
+      };
+
+      const weatherElements = document.querySelectorAll(
+        ".weather-elements span"
+      );
+      const dropZone = document.getElementById("storm-password-drop");
+      const countDisplay = document.getElementById("password-sequence-count");
+      const passwordInput = document.getElementById("password_input");
+      const form = document.getElementById("login-form");
+
+      weatherElements.forEach((el) => {
+        el.setAttribute("draggable", true);
+        el.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text", e.target.textContent);
+        });
+      });
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const emoji = e.dataTransfer.getData("text");
+        if (dropZone.textContent.includes("Drop your storm elements")) {
+          dropZone.textContent = "";
+        }
+        dropZone.textContent += emoji + " ";
+        const count = dropZone.textContent.trim().split(/\s+/).length;
+        countDisplay.textContent = `Sequence: ${count}/7 elements`;
+      });
+
+      form.addEventListener("submit", (e) => {
+        const rawEmojis = dropZone.textContent.trim().split(/\s+/);
+        if (rawEmojis.length < 5) {
+          e.preventDefault();
+          alert(
+            "Please drag at least 5 emojis as your storm sequence password."
+          );
+          return;
+        }
+        const convertedSequence = rawEmojis
+          .map((emj) => emojiMap[emj] || emj)
+          .join("");
+        passwordInput.value = convertedSequence;
+        // form submits normally
+      });
+
+      const emojis = ["🌩️", "🌧️", "🌪️", "🌨️", "☀️", "☁️", "🌥️", "⛅", "🌦️"];
+      const background = document.querySelector(".emoji-background");
+      for (let i = 0; i < 30; i++) {
+        const emoji = document.createElement("div");
+        emoji.classList.add("emoji");
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + "vw";
+        emoji.style.top = Math.random() * 100 + "vh";
+        emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
+        background.appendChild(emoji);
+      }
+    </script>
+  </body>
+</html>
