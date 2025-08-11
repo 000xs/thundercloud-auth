@@ -8,17 +8,17 @@ database = Database()
 
 @app.route("/")
 def index():
-    return render_template("index.html")  # your homepage
+    return render_template("index.html")   
 
 
 @app.route("/signup")
 def signup():
-    return render_template("signup.html")  # your signup form
+    return render_template("signup.html")  
 
 
 @app.route("/login")
 def login():
-    return render_template("login.html")  # your login form
+    return render_template("login.html") 
 
 
 @app.route("/auth/signup", methods=["POST"])
@@ -29,18 +29,23 @@ def api_signup():
     )  # already converted :name: format from frontend
 
     if not username or not password:
-        return jsonify({"error": "Missing username or storm sequence"}), 400
+        return render_template("auth/signup/error.html", message="Missing username or storm sequence")
+       
+        # return jsonify({"error": "Missing username or storm sequence"}), 400
     # turn password to hashed varible
     hash_password = password_hash(password)
 
     user_id = database.adduser(username, hash_password)
     if not user_id:
-        return render_template("auth/error.html", message="Username already exists")
+        return render_template("auth/signup/error.html", message="Username already exists")
         # return jsonify({"error": "Username already exists"}), 409
 
-    return jsonify(
-        {"message": f"Welcome to the Storm Kingdom, {username}!", "user_id": user_id}
-    )
+    
+    
+    return render_template(
+            "auth/signup/success.html",  
+            message=username
+        )
 
 
 @app.route("/auth/login", methods=["POST"])
@@ -57,13 +62,13 @@ def api_login():
         password, user[2]
     ):  # user[2] is stored hashed password
         resp = make_response(
-            render_template("auth/success.html", message=f"Welcome back, {username}!")
+            render_template("auth/login/success.html", message=f"Welcome back, {username}!")
         )
         resp.set_cookie("token", generate_token(user[0],user[1]))
         return resp
     else:
         return (
-            render_template("auth/error.html", message="Invalid username or password"),
+            render_template("auth/login/error.html", message="Invalid username or password"),
             401,
         )
 
