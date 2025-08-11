@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response,redirect,url_for
 from database import Database
 from utils import generate_token, verify_token, password_hash, valid_hashed_password
 
@@ -87,3 +87,11 @@ def account():
         storm_sequence=userdata["user_id"],
     )
     # return jsonify(user)
+@app.route("/logout")
+def logout():
+    """Delete the cookie and redirect to root."""
+    resp = make_response(redirect(url_for("index")))
+    
+    resp.delete_cookie("token")
+    return resp
+   
