@@ -1,7 +1,7 @@
 import sqlite3
 import threading
+import os
 from utils import valid_hashed_password
-
 
 class Database:
     def __init__(self):
@@ -13,7 +13,12 @@ class Database:
         );
         """
         self.lock = threading.Lock()
-        self.db_path = ":memory:" # Use in-memory database for Vercel
+
+        # Use writable path on Vercel
+        tmp_dir = "/tmp"
+        os.makedirs(tmp_dir, exist_ok=True)
+        self.db_path = os.path.join(tmp_dir, "database.db")
+
         self.init_db()
 
     def init_db(self):
@@ -23,11 +28,10 @@ class Database:
             con.commit()
 
     def get_db_connection(self):
-        return sqlite3.connect(self.db_path)
+        return sqlite3.connect(self.db_path, check_same_thread=False)
 
     def adduser(self, username, password):
         with self.lock:
-
             with self.get_db_connection() as con:
                 cur = con.cursor()
                 try:
@@ -47,8 +51,7 @@ class Database:
                 "SELECT * FROM users WHERE username = ?",
                 (username,),
             )
-            user = cur.fetchone()
-            return user
+            return cur.fetchone()
 
     def validate_user(self, user_data):
         with self.get_db_connection() as con:
@@ -57,5 +60,4 @@ class Database:
                 "SELECT * FROM users WHERE username = ? AND id = ?",
                 (user_data["user_name"], user_data["user_id"]),
             )
-            user = cur.fetchone()
-            return user if user else None
+            return cur.fetchone()
