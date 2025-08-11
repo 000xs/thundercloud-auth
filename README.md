@@ -1,4 +1,5 @@
 # Thundercloud Authentication™
+![alt text](6d62de22-6123-4376-a2ac-c086a97a9afc-min.png)
 
 This is a Flask-based web application that provides a unique and fun authentication system based on weather-related emoji sequences.
 
@@ -109,4 +110,4 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. (Note: LICENSE.md does not exist, but it's good practice to mention it).
+This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.

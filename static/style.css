@@ -12,6 +12,7 @@ body {
   color: #e0e0e0;
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 @keyframes float {
@@ -390,6 +391,8 @@ h2 {
   width: 90%;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 .modal-content h2 {
   margin-bottom: 20px;
@@ -476,6 +479,52 @@ h2 {
   }
   .weather-elements {
     justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 20px;
+    width: 95%;
+  }
+  .modal-content h2 {
+    font-size: 1.2rem;
+  }
+  .modal-content h2 span {
+    font-size: 48px;
+  }
+  .selectable-image {
+    width: 120px;
+    height: 120px;
+  }
+  .form-section h2 {
+    font-size: 18px;
+  }
+  .weather-elements span {
+    font-size: 24px;
+    padding: 8px;
+  }
+  .robot {
+    padding: 15px;
+  }
+  .robot input[type="checkbox"] {
+    transform: scale(2);
+  }
+}
+
+@media (max-width: 400px) {
+  .modal-content h2 {
+    font-size: 1rem;
+  }
+  .modal-content h2 span {
+    font-size: 40px;
+  }
+  .selectable-image {
+    width: 100px;
+    height: 100px;
+  }
+  .image-options {
+    gap: 5px;
   }
 }
 
