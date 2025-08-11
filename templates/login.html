@@ -86,27 +86,77 @@
       const passwordInput = document.getElementById("password_input");
       const form = document.getElementById("login-form");
 
+      let draggedEmoji = null;
+
+      // Touch event handlers for emojis
       weatherElements.forEach((el) => {
+        el.addEventListener("touchstart", (e) => {
+          draggedEmoji = e.target.textContent;
+          e.target.style.opacity = '0.5'; // Visual feedback for dragging
+        });
+
+        el.addEventListener("touchmove", (e) => {
+          e.preventDefault(); // Prevent scrolling while dragging
+        });
+
+        el.addEventListener("touchend", (e) => {
+          e.target.style.opacity = '1'; // Reset opacity
+          // Simulate drop event on dropZone if touch is within its bounds
+          const touch = e.changedTouches[0];
+          const dropZoneRect = dropZone.getBoundingClientRect();
+          if (
+            touch.clientX >= dropZoneRect.left &&
+            touch.clientX <= dropZoneRect.right &&
+            touch.clientY >= dropZoneRect.top &&
+            touch.clientY <= dropZoneRect.bottom
+          ) {
+            handleDrop(draggedEmoji);
+          }
+          draggedEmoji = null;
+        });
+
+        // Keep dragstart for desktop compatibility
         el.setAttribute("draggable", true);
         el.addEventListener("dragstart", (e) => {
-          e.dataTransfer.setData("text", e.target.textContent);
+          draggedEmoji = e.target.textContent;
+          e.dataTransfer.setData("text", draggedEmoji);
+          e.target.style.opacity = '0.5';
+        });
+        el.addEventListener("dragend", (e) => {
+          e.target.style.opacity = '1';
+          draggedEmoji = null;
         });
       });
 
+      // Touch event handlers for drop zone
       dropZone.addEventListener("dragover", (e) => {
         e.preventDefault();
       });
 
       dropZone.addEventListener("drop", (e) => {
         e.preventDefault();
-        const emoji = e.dataTransfer.getData("text");
+        handleDrop(e.dataTransfer.getData("text"));
+      });
+
+      dropZone.addEventListener("touchmove", (e) => {
+        e.preventDefault(); // Prevent scrolling while hovering over drop zone
+      });
+
+      dropZone.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        if (draggedEmoji) {
+          handleDrop(draggedEmoji);
+        }
+      });
+
+      function handleDrop(emoji) {
         if (dropZone.textContent.includes("Drop your storm elements")) {
           dropZone.textContent = "";
         }
         dropZone.textContent += emoji + " ";
         const count = dropZone.textContent.trim().split(/\s+/).length;
         countDisplay.textContent = `Sequence: ${count}/7 elements`;
-      });
+      }
 
       form.addEventListener("submit", (e) => {
         const rawEmojis = dropZone.textContent.trim().split(/\s+/);

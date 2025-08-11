@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Create Your Storm Kingdom</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
   </head>
   <body>
     <div class="emoji-background"></div>
@@ -32,7 +35,9 @@
         <div class="form-section">
           <h2>⚡ Your Storm Sequence</h2>
           <p>Drag 5–7 weather emojis to create your unique pattern</p>
-          <div class="drop-zone" id="storm-sequence">Drop your storm elements here...</div>
+          <div class="drop-zone" id="storm-sequence">
+            Drop your storm elements here...
+          </div>
           <p id="sequence-count">Sequence: 0/7 elements</p>
         </div>
 
@@ -56,7 +61,33 @@
         <!-- Hidden input to store the sequence for form submission -->
         <input type="hidden" name="storm_sequence" id="storm_sequence_input" />
 
-        <input type="submit" value="⚡ Forge Your Storm Kingdom" class="cta-btn" />
+        <div class="not-robot-container">
+          
+          <!-- Checkbox and label -->
+          <div class="robot">
+            <input type="checkbox" id="not_robot"  required />
+            <label for="not_robot">I'm not a robot</label>
+          </div>
+
+          <!-- Modal popup container (hidden by default) -->
+          <div id="robot-modal" class="modal">
+            <div class="modal-content">
+              <h2>Select the image that matches: <br /> <span id="emoji-challenge">.emoji</span></h2>
+              <div class="image-options">
+                <img src="{{ url_for('static', filename='images/thunder.png') }}" alt="thunder" class="selectable-image" data-emoji="🌩️" />
+                <img src="{{ url_for('static', filename='images/tornado.png') }}" alt="tornado" class="selectable-image" data-emoji="🌪️" />
+                <img src="{{ url_for('static', filename='images/cloudy.png') }}" alt="cloudy" class="selectable-image" data-emoji="☁️" />
+                <img src="{{ url_for('static', filename='images/sunny.png') }}" alt="sunny" class="selectable-image" data-emoji="☀️" />
+              </div>
+              <button id="close-modal" disabled>Confirm</button>
+            </div>
+          </div>
+
+        <input
+          type="submit"
+          value="⚡ Forge Your Storm Kingdom"
+          class="cta-btn"
+        />
       </form>
     </div>
 
@@ -73,7 +104,9 @@
         "☀️": ":sun:",
       };
 
-      const weatherElements = document.querySelectorAll(".weather-elements span");
+      const weatherElements = document.querySelectorAll(
+        ".weather-elements span"
+      );
       const dropZone = document.getElementById("storm-sequence");
       const countDisplay = document.getElementById("sequence-count");
       const form = document.getElementById("signup-form");
@@ -115,11 +148,16 @@
           .map((emj) => emojiMap[emj] || emj)
           .join("");
 
-        document.getElementById("storm_sequence_input").value = convertedSequence;
+        document.getElementById("storm_sequence_input").value =
+          convertedSequence;
         // Allow form to submit normally
       });
 
-      const emojis = ["🌩️", "🌧️", "🌪️", "🌨️", "☀️", "☁️", "🌥️", "⛅", "🌦️"];
+      const emojis = ["🌩️", "🌪️", "☁️", "☀️"];
+      const emojiChallengeElement = document.getElementById("emoji-challenge");
+      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      emojiChallengeElement.textContent = randomEmoji;
+
       const background = document.querySelector(".emoji-background");
       for (let i = 0; i < 30; i++) {
         const emoji = document.createElement("div");
@@ -130,6 +168,70 @@
         emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
         background.appendChild(emoji);
       }
+
+      //<!-- i m a not a robot logics  -->
+      const checkbox = document.getElementById('not_robot');
+      const modal = document.getElementById('robot-modal');
+      const images = document.querySelectorAll('.selectable-image');
+      const confirmBtn = document.getElementById('close-modal');
+    
+      let selectedImage = null;
+    
+      // When checkbox is clicked and becoming checked, open modal and uncheck
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          checkbox.checked = false;  // prevent checking until task done
+          openModal();
+        }
+      });
+    
+      function openModal() {
+        modal.style.display = 'flex';
+        confirmBtn.disabled = true;
+        clearSelection();
+      }
+    
+      function closeModal() {
+        modal.style.display = 'none';
+      }
+    
+      function clearSelection() {
+        selectedImage = null;
+        images.forEach(img => img.classList.remove('selected'));
+      }
+    
+      images.forEach(img => {
+        img.addEventListener('click', () => {
+          images.forEach(i => i.classList.remove('selected'));
+          img.classList.add('selected');
+          selectedImage = img;
+    
+          confirmBtn.disabled = false;
+        });
+      });
+    
+      confirmBtn.addEventListener('click', () => {
+        if (!selectedImage) return;
+    
+        if (selectedImage.dataset.emoji === emojiChallengeElement.textContent) {
+          // Correct selection: close modal and check box
+          closeModal();
+          checkbox.checked = true;
+          alert("Success! You're not a robot.");
+        } else {
+          alert("Wrong selection, please try again.");
+          clearSelection();
+          confirmBtn.disabled = true;
+        }
+      });
+    
+      // Optional: close modal if clicked outside modal content
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
     </script>
   </body>
 </html>
+

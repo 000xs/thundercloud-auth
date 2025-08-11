@@ -27,7 +27,8 @@ body {
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   25% {
@@ -183,7 +184,18 @@ h2 {
 }
 
 .cta-btn {
-  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
   background-size: 200% 200%;
   animation: color-shift 8s ease infinite;
   color: #fff;
@@ -198,6 +210,58 @@ h2 {
   animation-play-state: paused;
 }
 
+.game-container {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.game-container h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.game-container p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #a3a4c4;
+}
+
+#weather-description {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+#emoji-options {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+#emoji-options button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#emoji-options button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#game-result {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
 .logout-btn {
   background-color: #e74c3c;
 }
@@ -206,7 +270,28 @@ h2 {
 }
 
 .account-form {
-  text-align: left;
+  text-align: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  margin-bottom: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .username,
@@ -224,7 +309,6 @@ h2 {
 /* simple styles for emoji keyboard */
 .emoji-keyboard {
   margin-top: 0.5rem;
- 
 }
 .emoji-keyboard span {
   font-size: 2rem;
@@ -258,6 +342,99 @@ h2 {
   border-radius: 4px;
   padding: 0.3rem 0.6rem;
   cursor: pointer;
+}
+
+/* im not arobot styles  */
+
+.robot {
+
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+   
+  max-width: fit-content;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  color: #e0e0e0;
+
+  margin: 12px 0px;
+}
+.robot input[type="checkbox"] {
+  transform: scale(2.5);
+  margin-right: 12px;
+  cursor: pointer;
+}
+.robot label {
+  cursor: pointer;
+ 
+}
+
+/* --- Modal styles --- */
+.modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background-color: rgba(28, 1, 44, 0);
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.modal-content {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.modal-content h2 {
+  margin-bottom: 20px;
+  color: white;
+}
+.modal-content h2 span{
+  font-size: 64px;
+}
+ 
+.image-options {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.selectable-image {
+  width: 160px;
+  height: 160px;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  object-fit: contain;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.selectable-image:hover {
+  border-color: #2196F3;
+  box-shadow: 0 0 10px #2196F3;
+}
+.selectable-image.selected {
+  border-color: #4caf50;
+  box-shadow: 0 0 15px #4caf50;
+}
+#close-modal {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+#close-modal:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
@@ -297,7 +474,7 @@ h2 {
     width: 100%;
     text-align: center;
   }
-.weather-elements {
+  .weather-elements {
     justify-content: center;
   }
 }
