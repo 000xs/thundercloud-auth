@@ -59,7 +59,7 @@ def api_login():
         resp = make_response(
             render_template("auth/success.html", message=f"Welcome back, {username}!")
         )
-        resp.set_cookie("token", generate_token(user[1]))
+        resp.set_cookie("token", generate_token(user[0],user[1]))
         return resp
     else:
         return (
