@@ -1,5 +1,7 @@
 import sqlite3
 import threading
+from utils import valid_hashed_password
+
 
 class Database:
     def __init__(self):
@@ -11,16 +13,20 @@ class Database:
         );
         """
         self.lock = threading.Lock()
+        self.db_path = ":memory:" # Use in-memory database for Vercel
 
-        with sqlite3.connect("database.db") as con:
+        with sqlite3.connect(self.db_path) as con:
             cur = con.cursor()
             cur.execute(self.user_table_create_query)
             con.commit()
 
+    def get_db_connection(self):
+        return sqlite3.connect(self.db_path)
+
     def adduser(self, username, password):
         with self.lock:
-            
-            with sqlite3.connect("database.db") as con:
+
+            with self.get_db_connection() as con:
                 cur = con.cursor()
                 try:
                     cur.execute(
@@ -32,23 +38,22 @@ class Database:
                 except sqlite3.IntegrityError:
                     return None  # username exists
 
-    def verify_user(self, username, password):
-        with sqlite3.connect("database.db") as con:
+    def verify_user(self, username):
+        with self.get_db_connection() as con:
             cur = con.cursor()
             cur.execute(
-                "SELECT id FROM users WHERE username = ? AND password = ?",
-                (username, password),
+                "SELECT * FROM users WHERE username = ?",
+                (username,),
             )
             user = cur.fetchone()
             return user
-        
+
     def validate_user(self, user_data):
-        with sqlite3.connect("database.db") as con:
+        with self.get_db_connection() as con:
             cur = con.cursor()
             cur.execute(
                 "SELECT * FROM users WHERE username = ? AND id = ?",
-                (user_data['user_name'], user_data['user_id']),
+                (user_data["user_name"], user_data["user_id"]),
             )
             user = cur.fetchone()
             return user if user else None
-

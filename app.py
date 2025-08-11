@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify,make_response
 from database import Database
-from utils import generate_token, verify_token
+from utils import generate_token, verify_token,password_hash,valid_hashed_password
 
 app = Flask(__name__)
 database = Database()
@@ -24,34 +24,32 @@ def api_signup():
 
     if not username or not password:
         return jsonify({"error": "Missing username or storm sequence"}), 400
-
-    user_id = database.adduser(username, password)
+    # turn password to hashed varible 
+    hash_password = password_hash(password)
+    
+    user_id = database.adduser(username,hash_password)
     if not user_id:
-        return jsonify({"error": "Username already exists"}), 409
+        return render_template('auth/error.html', message="Username already exists")
+        # return jsonify({"error": "Username already exists"}), 409
 
     return jsonify({"message": f"Welcome to the Storm Kingdom, {username}!", "user_id": user_id})
 
 @app.route("/auth/login", methods=["POST"])
 def api_login():
     username = request.form.get("username")
-    password = request.form.get("password")  # already converted :name: format from frontend
+    password = request.form.get("password")   
 
     if not username or not password:
         return render_template('auth/error.html', message="Invalid username or password")
          
-
-    user = database.verify_user(username, password)
-     
-
+    # validate hash password 
+    user = database.verify_user(username,password)
     if user:
         resp =  make_response(render_template('auth/success.html', message=f"Welcome back, {username}!"))
         resp.set_cookie('token', generate_token(user[0],username))
         return resp
-         
     else:
         return render_template('auth/error.html', message="Invalid username or password")
-        
-        # return jsonify({"error": "Invalid username or password"}), 401
 
 
 @app.route('/account')
