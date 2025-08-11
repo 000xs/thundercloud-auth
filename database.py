@@ -53,6 +53,7 @@ class Database:
             )
             return cur.fetchone()
 
+
     def validate_user(self, user_data):
         with self.get_db_connection() as con:
             cur = con.cursor()
