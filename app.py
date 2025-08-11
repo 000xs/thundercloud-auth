@@ -5,9 +5,20 @@ from utils import generate_token, verify_token, password_hash, valid_hashed_pass
 app = Flask(__name__)
 database = Database()
 
+# midelware 
+@app.before_request
+def check_authentication():
+    protected_paths = ['/account']  
 
+    if request.path in protected_paths:
+         
+        token = request.cookies.get('token')
+        if not token or not verify_token(token):
+            return render_template("unauthorized.html") # Unauthorized
+            
 @app.route("/")
 def index():
+    """Displays the homepage."""
     return render_template("index.html")   
 
 
@@ -26,13 +37,11 @@ def api_signup():
     username = request.form.get("username")
     password = request.form.get(
         "storm_sequence"
-    )  # already converted :name: format from frontend
-
+    )  
     if not username or not password:
         return render_template("auth/signup/error.html", message="Missing username or storm sequence")
        
-        # return jsonify({"error": "Missing username or storm sequence"}), 400
-    # turn password to hashed varible
+
     hash_password = password_hash(password)
 
     user_id = database.adduser(username, hash_password)
@@ -60,7 +69,7 @@ def api_login():
 
     if user and valid_hashed_password(
         password, user[2]
-    ):  # user[2] is stored hashed password
+    ):  
         resp = make_response(
             render_template("auth/login/success.html", message=f"Welcome back, {username}!")
         )
@@ -79,14 +88,19 @@ def account():
 
     userdata = verify_token(token)
 
+    if not userdata:
+        return render_template('unauthorized.html')
+    
     user = database.validate_user(userdata)
+
+    if not user:
+        return render_template('unauthorized.html')
 
     return render_template(
         "account.html",
         username=userdata["user_name"],
         storm_sequence=userdata["user_id"],
     )
-    # return jsonify(user)
 @app.route("/logout")
 def logout():
     """Delete the cookie and redirect to root."""
@@ -94,4 +108,3 @@ def logout():
     
     resp.delete_cookie("token")
     return resp
-   

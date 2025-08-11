@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Error</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1rem;
+      flex: 1;
+    }
+    .error-container h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #e74c3c; /* Red color for error */
+    }
+    .error-container p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #a3a4c4;
+    }
+  </style>
+</head>
+<body>
+  <div class="emoji-background"></div>
+  <div class="container error-container">
+    <h1>❌ Error!</h1>
+    <p>{{ message }}</p>
+    <a href="{{ url_for('login') }}" class="cta-btn">Go Back</a>
+  </div>
+  <script>
+    const emojis = ["😭", "😢", "😡", "😠", "🤬", "🤯", "😱", "😨", "😰"];
+    const background = document.querySelector(".emoji-background");
+    for (let i = 0; i < 30; i++) {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.top = Math.random() * 100 + "vh";
+      emoji.style.animationDuration = Math.random() * 5 + 5 + "s";
+      background.appendChild(emoji);
+    }
+  </script>
+</body>
+</html>
