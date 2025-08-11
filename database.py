@@ -14,8 +14,10 @@ class Database:
         """
         self.lock = threading.Lock()
         self.db_path = ":memory:" # Use in-memory database for Vercel
+        self.init_db()
 
-        with sqlite3.connect(self.db_path) as con:
+    def init_db(self):
+        with self.get_db_connection() as con:
             cur = con.cursor()
             cur.execute(self.user_table_create_query)
             con.commit()
