@@ -231,6 +231,40 @@ h2 {
   margin-bottom: 20px;
   color: #a3a4c4;
 }
+.score{
+  background-color: #16213e;
+  border-radius: 12px;
+  padding: 10px;
+  margin: 3px;
+}
+
+#score-container {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.fun-fact-container {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.fun-fact-container h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.fun-fact-container p {
+  font-size: 16px;
+  color: #a3a4c4;
+  font-style: italic;
+}
 
 #weather-description {
   font-size: 2rem;
@@ -483,6 +517,12 @@ h2 {
 }
 
 @media (max-width: 600px) {
+  .leaderboard-container {
+    padding: 15px;
+  }
+  th, td {
+    padding: 10px 15px;
+  }
   .modal-content {
     padding: 20px;
     width: 95%;
@@ -511,6 +551,124 @@ h2 {
     transform: scale(2);
   }
 }
+
+/* Leaderboard styles */
+.leaderboard-container {
+  margin: 30px auto;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(22, 33, 62, 0.8), rgba(15, 52, 96, 0.8));
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.3);
+  overflow-x: auto;
+}
+
+.leaderboard-container h2 {
+  font-size: 2.2rem;
+  color: #fff;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 300px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 14px 18px;
+  color: #e0e0e0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+th {
+  background-color: rgba(0, 123, 255, 0.2);
+  font-weight: 600;
+  text-transform: uppercase;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+}
+
+th:first-child,
+td:first-child {
+  text-align: center;
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.3);
+  cursor: pointer;
+}
+
+td:first-child {
+  font-weight: bold;
+  color: #ffc107;
+  width: 15%;
+}
+
+td:nth-child(2) {
+  font-weight: 500;
+}
+
+/* Responsive adjustments for table */
+@media (max-width: 600px) {
+  .leaderboard-container {
+    padding: 15px;
+  }
+  th, td {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  td:first-child {
+    width: 20%;
+  }
+}
+
+/* Add some spacing to the navbar links */
+.navbar .nav-links a {
+  margin-left: 1.5rem;
+}
+
+/* Style for the link to leaderboard in the navbar */
+.navbar .nav-links a.leaderboard-link {
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Style for links within the leaderboard table */
+.navbar .nav-links a:not(.leaderboard-link) {
+  color: #a3a4c4;
+}
+
+/* Add a link to the leaderboard in the navbar */
+.navbar .nav-links {
+  display: flex;
+  align-items: center;
+}
+
+/* Add a link to the leaderboard in the navbar */
+.navbar .nav-links a[href="/leaderboard"] {
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Add links from leaderboard to other pages */
+/* This will be handled in the leaderboard.html file itself */
 
 @media (max-width: 400px) {
   .modal-content h2 {

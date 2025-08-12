@@ -96,11 +96,16 @@ def account():
     if not user:
         return render_template('unauthorized.html')
 
+    users_progress = database.get_all_users_progress()
+
     return render_template(
         "account.html",
         username=userdata["user_name"],
+        scores=user[3],
         storm_sequence=userdata["user_id"],
+        users=users_progress
     )
+
 @app.route("/logout")
 def logout():
     """Delete the cookie and redirect to root."""
@@ -108,3 +113,17 @@ def logout():
     
     resp.delete_cookie("token")
     return resp
+
+@app.route("/update_score", methods=["POST"])
+def update_score():
+    token = request.cookies.get("token")
+    userdata = verify_token(token)
+    if not userdata:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    score = request.json.get("score")
+    if score is None:
+        return jsonify({"error": "Missing score"}), 400
+
+    database.update_user_score(userdata["user_id"], score)
+    return jsonify({"success": True})

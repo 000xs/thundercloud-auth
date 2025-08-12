@@ -12,8 +12,9 @@
         <div class="logo">🌩️</div>
         <div class="nav-links">
             <a href="/">Home</a>
+            <a href="/account">Account</a>
             <a href="/logout">Logout</a>
-        </div>
+      </div>
     </nav>
 
     <div class="container">
@@ -23,6 +24,7 @@
                     <span id="profile-emoji"></span>
                 </div>
                 <h1 class="username">{{ username }}</h1>
+                <span class="score"> 💰 {{ scores }}</span>
             </div>
 
             <button type="submit" class="cta-btn logout-btn">Logout</button>
@@ -34,6 +36,34 @@
             <div id="weather-description"></div>
             <div id="emoji-options"></div>
             <div id="game-result"></div>
+            <div id="score-container">Score: <span id="score">0</span></div>
+        </div>
+
+        <div class="fun-fact-container">
+            <h2>Did you know?</h2>
+            <p id="fun-fact"></p>
+        </div>
+
+        <div class="leaderboard-container">
+            <h2>Leaderboard</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Scores</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user[0] }}</td>
+                        <td>{{ user[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
     <script>
@@ -68,6 +98,7 @@
       const gameResultElement = document.getElementById("game-result");
 
       let correctAnswer;
+      let score = 0;
 
       function startGame() {
         gameResultElement.innerText = "";
@@ -99,11 +130,36 @@
       function checkAnswer(selectedEmoji) {
         if (selectedEmoji === correctAnswer) {
           gameResultElement.innerText = "Correct! 🎉";
+          score++;
+          updateScore(score);
         } else {
           gameResultElement.innerText = "Wrong! Try again. 😢";
+          score = 0;
+          updateScore(score);
         }
+        document.getElementById("score").innerText = score;
         setTimeout(startGame, 2000);
       }
+
+      function updateScore(newScore) {
+        fetch("/update_score", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ score: newScore }),
+        });
+      }
+
+      const funFacts = [
+        "A bolt of lightning is about 5 times hotter than the surface of the sun.",
+        "A tornado can be more than a mile wide and travel at speeds of up to 300 miles per hour.",
+        "The most rainfall ever recorded in one year was 25.4 meters (1,000 inches) in Cherrapunji, India.",
+        "Snowflakes are not always unique. In 1988, a scientist found two identical snowflakes from a storm in Wisconsin.",
+        "The world's largest hailstone weighed over 1 kilogram (2.25 pounds) and was found in Bangladesh in 1986."
+      ];
+      const funFactElement = document.getElementById("fun-fact");
+      funFactElement.innerText = funFacts[Math.floor(Math.random() * funFacts.length)];
 
       startGame();
     </script>
